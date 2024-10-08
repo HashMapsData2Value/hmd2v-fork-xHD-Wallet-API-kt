@@ -112,7 +112,9 @@ tasks.named("build") {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            from(components["java"])
+            // Exclude the default JAR
+            // from(components["java"])
+
             groupId = project.group.toString()
             artifactId = "xhdwalletapi"
             version = project.version.toString()
