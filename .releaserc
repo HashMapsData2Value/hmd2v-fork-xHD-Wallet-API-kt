@@ -1,5 +1,11 @@
 {
-  "branches": ["release/*"],
+  "branches": [
+    {
+      "name": "main",
+      "prerelease": "canary"
+    },
+    "release/*"
+  ],
   "plugins": [
     "@semantic-release/commit-analyzer",
     [
