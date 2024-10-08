@@ -10,7 +10,6 @@ plugins {
     id("maven-publish")
     id("signing")
     id("tech.yanand.maven-central-publish") version "1.2.0"
-
 }
 
 java {
@@ -56,6 +55,17 @@ tasks.register<Jar>("javadocJar") {
 tasks.register<Jar>("sourcesJar") {
     archiveClassifier.set("sources")
     from(sourceSets.main.get().allSource)
+}
+
+// Create a "fat" JAR containing the runtime dependencies.
+tasks.register<Jar>("fatJar") {
+    archiveClassifier.set("all")
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
 }
 
 // Run ./gradlew test to execute tests not requiring an Algorand Sandbox network
@@ -105,6 +115,9 @@ publishing {
             artifactId = "xhdwalletapi"
             version = project.version.toString()
 
+            artifact(tasks["fatJar"]) {
+                classifier = null
+            }
             artifact(tasks["javadocJar"])
             artifact(tasks["sourcesJar"])
 
