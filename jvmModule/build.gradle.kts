@@ -105,6 +105,9 @@ publishing {
             artifactId = "xhdwalletapi"
             version = project.version.toString()
 
+            artifact(tasks["javadocJar"])
+            artifact(tasks["sourcesJar"])
+
             pom {
                 name.set("XHDWalletAPI")
                 description.set("A library for extended hierarchical deterministic wallets")
