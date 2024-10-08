@@ -14,6 +14,8 @@ plugins {
     `java-library`
     id("maven-publish")
     id("signing")
+    id("tech.yanand.maven-central-publish") version "1.2.0"
+
 }
 
 java {
