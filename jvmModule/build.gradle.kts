@@ -6,12 +6,14 @@
  */
 
 version = project.property("version") as String
-group = "foundation.algorand.xhdwalletapi"
+group = "io.github.hashmapsdata2value.xhdwalletapi"
 
 plugins {
     kotlin("plugin.serialization") version "1.9.22"
     kotlin("jvm")
     `java-library`
+    id("maven-publish")
+    id("signing")
 }
 
 java {
@@ -86,4 +88,73 @@ task("copyJarToRoot", type = Copy::class) {
 
 tasks.named("build") {
     finalizedBy("copyJarToRoot")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            groupId = project.group.toString()
+            artifactId = "xhdwalletapi"
+            version = project.version.toString()
+
+            pom {
+                name.set("XHDWalletAPI")
+                description.set("A library for extended hierarchical deterministic wallets")
+                url.set("https://github.com/HashMapsData2Value/hmd2v-fork-xHD-Wallet-API-kt")
+                
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+                
+                developers {
+                    developer {
+                        id.set("hashmapsdata2value")
+                        name.set("HMD2V")
+                        email.set("yared@679labs.com")
+                    }
+                }
+                
+                scm {
+                    connection.set("scm:git:git://github.com/HashMapsData2Value/hmd2v-fork-xHD-Wallet-API-kt.git")
+                    developerConnection.set("scm:git:ssh://github.com/HashMapsData2Value/hmd2v-fork-xHD-Wallet-API-kt.git")
+                    url.set("https://github.com/HashMapsData2Value/hmd2v-fork-xHD-Wallet-API-kt.git")
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "Local"
+            url = uri(layout.buildDirectory.dir("repos/bundles").get().asFile.toURI())
+        }
+    }
+}
+
+signing {
+    val signingKey = System.getenv("GPG_PRIVATE_KEY") ?: ""
+    val signingPassword = System.getenv("GPG_PASSPHRASE") ?: ""
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign(publishing.publications["mavenJava"])
+}
+
+val username = System.getenv("OSSRH_USERNAME") ?: ""
+val password = System.getenv("OSSRH_PASSWORD") ?: ""
+
+mavenCentral {
+    repoDir = layout.buildDirectory.dir("repos/bundles")
+    // Token for Publisher API calls obtained from Sonatype official,
+    // it should be Base64 encoded of "username:password".
+    authToken = Base64.getEncoder().encodeToString("$username:$password".toByteArray())
+    // Whether the upload should be automatically published or not. Use 'USER_MANAGED' if you wish to do this manually.
+    // This property is optional and defaults to 'AUTOMATIC'.
+    publishingType = "AUTOMATIC"
+    // Max wait time for status API to get 'PUBLISHING' or 'PUBLISHED' status when the publishing type is 'AUTOMATIC',
+    // or additionally 'VALIDATED' when the publishing type is 'USER_MANAGED'.
+    // This property is optional and defaults to 60 seconds.
+    maxWait = 500
 }

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package foundation.algorand.xhdwalletapi
+package io.github.hashmapsdata2value.xhdwalletapi
 
 import com.goterl.lazysodium.LazySodiumAndroid
 import com.goterl.lazysodium.SodiumAndroid

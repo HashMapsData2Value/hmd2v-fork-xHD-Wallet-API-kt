@@ -1,4 +1,4 @@
-package foundation.algorand.xhdwalletapi
+package io.github.hashmapsdata2value.xhdwalletapi
 
 import java.security.MessageDigest
 import java.util.Arrays

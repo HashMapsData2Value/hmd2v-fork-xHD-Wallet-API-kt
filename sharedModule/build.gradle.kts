@@ -6,7 +6,7 @@ plugins {
     `java-library`
 }
 
-group = "foundation.algorand.xhdwalletapi"
+group = "io.github.hashmapsdata2value.xhdwalletapi"
 version = project.property("version") as String
 
 
