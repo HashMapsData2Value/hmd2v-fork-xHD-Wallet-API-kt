@@ -1,7 +1,6 @@
 version = project.property('version')
 group = "io.github.hashmapsdata2value.xhdwalletapi"
 
-
 buildscript {
     repositories {
         google()
@@ -9,6 +8,7 @@ buildscript {
     }
     dependencies {
         classpath "tech.yanand.maven-central-publish:tech.yanand.maven-central-publish.gradle.plugin:1.2.0"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.4.32"
     }
 }
 
@@ -76,7 +76,6 @@ task copyAarToRoot(type: Copy) {
 }
 
 build.finalizedBy(copyAarToRoot)
-
 
 task sourcesJar(type: Jar) {
     archiveClassifier.set('sources')
